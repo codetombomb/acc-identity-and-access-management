@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
-
 from flask import request, make_response, session
 from flask_restful import Resource
-from werkzeug.exceptions import NotFound, Unauthorized
 
 from models import User, Production, CrewMember
 
@@ -49,16 +46,15 @@ class ProductionByID(Resource):
     def get(self, id):
         production = Production.query.filter_by(id=id).first()
         if not production:
-            raise NotFound
+            return {"error": "Production not found"}, 404
         production_dict = production.to_dict()
         response = make_response(production_dict, 200)
-
         return response
 
     def patch(self, id):
         production = Production.query.filter_by(id=id).first()
         if not production:
-            raise NotFound
+            return {"error": "Production not found"}, 404
 
         for attr in request.form:
             setattr(production, attr, request.form[attr])
@@ -77,7 +73,7 @@ class ProductionByID(Resource):
     def delete(self, id):
         production = Production.query.filter_by(id=id).first()
         if not production:
-            raise NotFound
+            return {"error": "Production not found"}, 404
         db.session.delete(production)
         db.session.commit()
 
@@ -126,15 +122,6 @@ api.add_resource(ProductionByID, "/productions/<int:id>")
 # -  create a 204 no content response to send back to the client
 
 # 7. Navigate to client/src/components/Navigation.js to build the logout button!
-
-
-@app.errorhandler(NotFound)
-def handle_not_found(e):
-    response = make_response(
-        "Not Found: Sorry the resource you are looking for does not exist", 404
-    )
-    return response
-
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

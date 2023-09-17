@@ -10,8 +10,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 app.json.compact = False
 
-#https://furry-shrimp-4f0.notion.site/Cookies-and-Sessions-Cheatsheet-2e4cbcd1c8ee4d71b8b0da395ebb3fe4?pvs=4
-app.secret_key = "Secret Key goes here" 
+# https://furry-shrimp-4f0.notion.site/Cookies-and-Sessions-Cheatsheet-2e4cbcd1c8ee4d71b8b0da395ebb3fe4?pvs=4
+app.secret_key = "Secret Key goes here"
 
 db = SQLAlchemy()
 migrate = Migrate(app, db)
