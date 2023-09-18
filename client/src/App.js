@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation/Navigation";
 import Home from "./components/Home/Home";
 import "./App.css";
+import Authentication from "./components/Authentication/Authentication";
 
 function App() {
   const [productions, setProductions] = useState([]);
 
   useEffect(() => {
-    fetchProductions()
+  //   fetchProductions()
   }, []);
 
   const fetchProductions = () => {
@@ -17,7 +18,8 @@ function App() {
       .then(setProductions);
   };
 
-  const addProduction = (production) => setProductions(current => [...current, production])
+  const addProduction = (production) =>
+    setProductions((current) => [...current, production]);
 
   return (
     <div className="App">
@@ -33,17 +35,29 @@ function App() {
         />
         <Route
           path={"/authentication"}
-          element={<div>Authentication Component</div>}
+          element={
+            <div>
+              <Authentication />
+            </div>
+          }
         />
         <Route
           path={"/"}
           element={
             <div>
-              <Home productions={productions}/>
+              <Home productions={productions} />
             </div>
           }
         />
-        <Route path={"*"} element={<div>Not Found Page</div>} />
+        <Route
+          path={"*"}
+          element={
+            <>
+              <h1>Sorry We can't find the Page you're looking for!</h1>
+              <h1>404 Not Found</h1>
+            </>
+          }
+        />
       </Routes>
     </div>
   );
