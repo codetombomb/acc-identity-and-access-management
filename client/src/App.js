@@ -4,6 +4,7 @@ import Navigation from "./components/Navigation/Navigation";
 import Home from "./components/Home/Home";
 import "./App.css";
 import Authentication from "./components/Authentication/Authentication";
+import NewProductionForm from "./components/NewProductionForm/NewProductionForm";
 
 function App() {
   const [productions, setProductions] = useState([]);
@@ -27,7 +28,7 @@ function App() {
       <Routes>
         <Route
           path={"/productions/new"}
-          element={<div>Productions New Form Component</div>}
+          element={<div><NewProductionForm addProduction={addProduction}/></div>}
         />
         <Route
           path={"/productions/:id"}
