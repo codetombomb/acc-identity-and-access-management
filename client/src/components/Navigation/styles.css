@@ -33,6 +33,7 @@
   height: 19px;
   border-radius: 30px;
   padding-top: 2px;
+  text-align: center
 }
 
 .close-button:hover {
