@@ -1,0 +1,50 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  margin: 2%;
+}
+
+.nav-title {
+  font-family: "Splash", cursive;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: white;
+  font-family: Arial;
+}
+
+.nav-menu a:hover {
+  color: pink;
+}
+
+.logout-button:hover {
+  color: pink;
+}
+
+.close-button {
+  border: 2px solid white;
+  width: 21px;
+  height: 19px;
+  border-radius: 30px;
+  padding-top: 2px;
+}
+
+.close-button:hover {
+  color: rgb(255, 136, 0);
+  border: 2px solid rgb(255, 136, 0);
+}
+
+.nav-menu ul {
+  list-style: none;
+}
+
+.nav-menu li {
+  font-family: Arial;
+  margin: 2%;
+}

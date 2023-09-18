@@ -1,9 +1,11 @@
 import { Route, Routes } from "react-router-dom";
+import Navigation from "./components/Navigation/Navigation";
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
+      <Navigation />
       <Routes>
         <Route
           path={"/productions/new"}
