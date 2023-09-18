@@ -3,16 +3,24 @@
   flex-direction: column;
   justify-content: start;
   font-family: Arial, sans-serif;
-  margin: 5px;
+  margin: 5%;
+  line-height: 40px;
+  text-wrap: wrap;
+  width: 50%;
 }
 
 .card-detail h1 {
   font-size: 60px;
   border-bottom: solid;
   border-color: #42ddf5;
+  padding: 2%;
 }
 
 .wrapper {
+  display: flex;
+}
+
+.wrapper h1 {
   display: flex;
 }
 

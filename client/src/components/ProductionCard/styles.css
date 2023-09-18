@@ -7,7 +7,7 @@
   position: relative;
 }
 
-&:hover {
+.production-card:hover {
   transform: scale(1.15);
   transform-origin: top left;
 }

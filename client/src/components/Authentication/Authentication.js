@@ -21,18 +21,10 @@ const Authentication = ({ updateUser }) => {
 
   const handleSubmit = () => {
     console.log("Handle the submit");
-    
   };
 
   return (
     <>
-      <h2 className="auth-errors">{"Errors here!!"}</h2>
-      <h2>{signUp ? "Already a member?" : "Not a member?"}</h2>
-      <button onClick={handleSignUpClick}>
-        {signUp ? "Log In!" : "Register now!"}
-      </button>
-
-
       <form onSubmit={handleSubmit}>
         <label>Username</label>
         <input type="text" name="name" value={"value"} onChange={console.log} />
@@ -49,8 +41,13 @@ const Authentication = ({ updateUser }) => {
         )}
         <input type="submit" value={signUp ? "Sign Up!" : "Log In!"} />
       </form>
-
-
+      <div className="auth-errors-switch-wrapper">
+        <h2 className="auth-errors">{"Errors here!!"}</h2>
+        <h2>{signUp ? "Already a member?" : "Not a member?"}</h2>
+        <button onClick={handleSignUpClick}>
+          {signUp ? "Log In!" : "Register now!"}
+        </button>
+      </div>
     </>
   );
 };

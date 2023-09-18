@@ -4,10 +4,17 @@
     width:70px;
     font-size: 70px;
     line-height: .8;
-   
+    margin-left: 5%;
+    padding-bottom: 5%;
     transform: scale(.7, 1.4);
 }
 
 .heading-highlight {
     color:#42ddf5;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: column;
+    margin: 5%;
 }
