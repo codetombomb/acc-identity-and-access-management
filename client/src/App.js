@@ -1,8 +1,24 @@
+import { useState, useEffect } from 'react'
 import { Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation/Navigation";
+import Home from "./components/Home/Home";
 import "./App.css";
 
 function App() {
+  const [productions, setProductions] = useState([]);
+
+  useEffect(() => {
+    fetchProductions()
+  }, []);
+
+  const fetchProductions = () => {
+    fetch("/productions")
+      .then((res) => res.json())
+      .then(setProductions);
+  };
+
+  const addProduction = (production) => setProductions(current => [...current, production])
+
   return (
     <div className="App">
       <Navigation />
@@ -21,7 +37,11 @@ function App() {
         />
         <Route
           path={"/"}
-          element={<div>Home Component</div>}
+          element={
+            <div>
+              <Home productions={productions}/>
+            </div>
+          }
         />
         <Route path={"*"} element={<div>Not Found Page</div>} />
       </Routes>
