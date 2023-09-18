@@ -1,0 +1,13 @@
+.productions-heading {
+    text-transform: uppercase;
+    font-family:Arial, sans-serif;
+    width:70px;
+    font-size: 70px;
+    line-height: .8;
+   
+    transform: scale(.7, 1.4);
+}
+
+.heading-highlight {
+    color:#42ddf5;
+}
