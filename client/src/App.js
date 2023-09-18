@@ -5,6 +5,7 @@ import Home from "./components/Home/Home";
 import "./App.css";
 import Authentication from "./components/Authentication/Authentication";
 import NewProductionForm from "./components/NewProductionForm/NewProductionForm";
+import ProductionDetail from "./components/ProductionDetail/ProductionDetail";
 
 function App() {
   const [productions, setProductions] = useState([]);
@@ -32,7 +33,7 @@ function App() {
         />
         <Route
           path={"/productions/:id"}
-          element={<div>Production Detail Page</div>}
+          element={<ProductionDetail />}
         />
         <Route
           path={"/authentication"}
