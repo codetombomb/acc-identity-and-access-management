@@ -10,10 +10,11 @@ import ProductionDetail from "./components/ProductionDetail/ProductionDetail";
 function App() {
   const [productions, setProductions] = useState([]);
   const [user, setUser] = useState(null);
+  const [errors, setErrors] = useState([])
 
   useEffect(() => {
-    // fetchUser()
-    // fetchProductions()
+    fetchUser()
+    fetchProductions()
   }, []);
 
   const fetchProductions = () => {
@@ -23,6 +24,16 @@ function App() {
   };
 
   const fetchUser = () => {
+    fetch("/authorized")
+      .then(resp => {
+        console.log(resp)
+        if(resp.ok){
+          resp.json().then(user => setUser(user))
+        } else {
+          resp.json().then(err => setErrors(err))
+        }
+      })
+      // .then(data => console.log(data))
     /*
     Create a GET fetch that goes to '/authorized'
       - If returned successfully set the user to state and fetch our productions
@@ -40,10 +51,16 @@ function App() {
       - If the user is not in state, return JSX and include <Navigation/> and <Authentication updateUser={updateUser}/>
       - Test out our route! Logout and try to visit other pages. Login and try to visit other pages again. Refresh the page and note that you are still logged in! 
   */
-
+  if(!user) return (
+    <>
+      <Navigation updateUser={updateUser}/>
+      <Authentication updateUser={updateUser} />
+    </>
+  )
+  
   return (
     <>
-      <Navigation />
+      <Navigation updateUser={updateUser}/>
       <Routes>
         <Route
           path={"/productions/new"}
@@ -58,7 +75,7 @@ function App() {
           path={"/authentication"}
           element={
             <div>
-              <Authentication />
+              <Authentication updateUser={updateUser}/>
             </div>
           }
         />
