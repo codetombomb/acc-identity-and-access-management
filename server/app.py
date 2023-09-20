@@ -94,6 +94,65 @@ api.add_resource(ProductionByID, "/productions/<int:id>")
 # - Save the new users id to the session hash
 # - Make a response and send it back to the client
 
+class Users(Resource):
+    
+    def post(self):
+        data = request.get_json()
+        # {"name": "elon", "email": "spacex@spacex.com"}
+        user = User(
+            name=data["name"],
+            email=data["email"]
+        )
+        
+        # Add new user to DB
+        db.session.add(user)
+        db.session.commit()
+        
+        # Create session
+        session["user_id"] = user.id
+        
+        return user.to_dict(), 201
+
+api.add_resource(Users, '/users')
+
+
+@app.route("/login", methods=['POST'])
+def login():
+    data = request.get_json()
+    
+    # Error handling
+        # Checking for blank values
+        
+    # "codetombomb" {"name": "codetomvbomb"}
+    
+    user = User.query.filter(User.name == data["name"]).first()
+    
+    # Error handling
+        # Is the user authenticated?
+    
+    session['user_id'] = user.id
+    return user.to_dict(), 200
+
+@app.route("/authorized", methods=["GET"])
+def authorized():
+    user = User.query.filter(User.id == session.get("user_id")).first()
+    if user:
+        return user.to_dict(), 200
+    else:
+        return {"errors": ["Unauthorized"]}, 401
+    
+@app.route("/logout", methods=["DELETE"])
+def logout():
+    session['user_id'] = None 
+    return {}, 204
+    
+    
+        
+    
+
+    
+    
+
 # 2. Test this route in the client/src/components/Authentication.js
 
 # 3. Create a Login route
