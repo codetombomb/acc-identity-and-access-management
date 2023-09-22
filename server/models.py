@@ -2,6 +2,9 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
 from config import db
 
+# 📝 2. Import bcrypt from config
+    # - go to User model below
+
 
 class Production(db.Model, SerializerMixin):
     __tablename__ = "productions"
@@ -66,6 +69,33 @@ class User(db.Model, SerializerMixin):
     admin = db.Column(db.String, default=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    
+    # 📝 3. Add a column _password_hash of type string
+    # Note: When an underscore is used, it's a sign that the variable or method is for internal use and should not be accessed from outside of the class directly.
+    
+    # 📝 4. Create a hybrid_property 
+        # - Import the hybrid_property decorator from  sqlalchemy.ext.hybrid 
+        # - Create the password_hash method
+        # - The password_hash function will act as our reader method and expose or restrict access to the _password_hash property
+        # - Show returning of the self._password_hash property
+        # - Show raising Error with message saying that password hash cant be viewed
+        
+    # 📝 5. Create a setter function for the password_hash property
+        # - Should be decorated with @password_hash.setter
+        # - Setter function should be named password_hash and should accept a password as an arg (and self)
+        # - Use the bcrypt.generate_password_hash() method to hash the password_passed as an arg (.decode("utf-8"))
+        # - set the _password_hash property to the hashed value
+        
+    # 📝 6. Create an authenticate method that:
+        # - takes in a provided password
+        # - uses bcrypt.check_password_hash() to check the self._password_hash against the provided password
+        
+    # - Back to app
+    
+    
+    
+    
+    
 
     def __repr__(self):
         return f"\n<User id={self.id} name={self.name} email={self.email} admin={self.admin}>"

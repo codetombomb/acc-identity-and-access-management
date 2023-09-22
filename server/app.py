@@ -84,103 +84,49 @@ class ProductionByID(Resource):
 
 api.add_resource(ProductionByID, "/productions/<int:id>")
 
-# 1. User - POST
+# 7. User - POST
 # - Create a User POST route by creating a class Users that inherits from Resource
 # - Add the route '/users' with api.add_resource()
 # - Create a POST method
-# - use .get_json() to convert the request json
-# - create a new user with the request data
-# - add and commit the new user
+# - Use .get_json() to convert the request json
+# - *** Check for missing values on the request json and return errors list with 422 if any missing ***
+# - Create a new user with the request data's name and email property
+# - *** Use the password_hash setter method to set the password on the new user object ***
+# - Add and commit the new user
 # - Save the new users id to the session hash
 # - Make a response and send it back to the client
+# - Handle errors on client side
 
-class Users(Resource):
-    
-    def post(self):
-        data = request.get_json()
-        # {"name": "elon", "email": "spacex@spacex.com"}
-        user = User(
-            name=data["name"],
-            email=data["email"]
-        )
-        
-        # Add new user to DB
-        db.session.add(user)
-        db.session.commit()
-        
-        # Create session
-        session["user_id"] = user.id
-        
-        return user.to_dict(), 201
+# 8. Create a Login route
+# - Create a login custom route with methods=["POST"]
+# - Build out the login function
+# - Use .get_json() to convert the request json
+# - Use the name in request data to query the user with a .filter
+# - If user found:
+    # - If user authenticated (pass password to authenticate method):
+        # - set session user_id
+        # - convert the user to_dict and send a response back to the client with 200
+    # - If user not authorized, return errors list "Username or password incorrect" 401 unauthorized
+# - If user not found, return errors list "Username or password incorrect" 401 unauthorized
+# - Handle errors on client side
 
-api.add_resource(Users, '/users')
-
-
-@app.route("/login", methods=['POST'])
-def login():
-    data = request.get_json()
-    
-    # Error handling
-        # Checking for blank values
-        
-    # "codetombomb" {"name": "codetomvbomb"}
-    
-    user = User.query.filter(User.name == data["name"]).first()
-    
-    # Error handling
-        # Is the user authenticated?
-    
-    session['user_id'] = user.id
-    return user.to_dict(), 200
-
-@app.route("/authorized", methods=["GET"])
-def authorized():
-    user = User.query.filter(User.id == session.get("user_id")).first()
-    if user:
-        return user.to_dict(), 200
-    else:
-        return {"errors": ["Unauthorized"]}, 401
-    
-@app.route("/logout", methods=["DELETE"])
-def logout():
-    session['user_id'] = None 
-    return {}, 204
-    
-    
-        
-    
-
-    
-    
-
-# 2. Test this route in the client/src/components/Authentication.js
-
-# 3. Create a Login route
-# - Create a login class that inherits from Resource
-# - Use api.add_resource to add the '/login' path
-# - Build out the post method
-# - convert the request from json and select the user name sent form the client.
-# - Use the name to query the user with a .filter
-# - If found set the user_id to the session hash
-# - convert the user to_dict and send a response back to the client
-# - Toggle the signup form to login and test the login route
-
-# 4. Create an AuthorizedSession class that inherits from Resource
-# - use api.add_resource to add an authorized route
-# - Create a get method
+# 11. Create an /authorized custom route with methods=['GET']
+# - Create a authorized function
 # - Access the user_id from session with session.get
 # - Use the user id to query the user with a .filter
-# - If the user id is in sessions and found make a response to send to the client. else raise the Unauthorized exception (Note- Unauthorized is being imported from werkzeug.exceptions)
+# - If the user id is in sessions and found make a response to send to the client
+# - If session user_id not present, return errors list "Unauthorized"
 
-# 5. Head back to client/src/App.js to restrict access to our app!
+# 12. Head back to client/src/App.js to restrict access to our app!
 
-# 6. Logout
+# 13. Logout
 # -  Create a class Logout that inherits from Resource
 # -  Create a method called delete
 # -  Clear the user id in session by setting the key to None
 # -  create a 204 no content response to send back to the client
 
-# 7. Navigate to client/src/components/Navigation.js to build the logout button!
+# 14. Navigate to client/src/components/Navigation.js to build the logout button!
+
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

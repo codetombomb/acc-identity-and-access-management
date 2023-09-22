@@ -4,6 +4,11 @@ from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 
+# 1. 📝 Install flask-bcrypt
+    # - Import Bcrypt from flask_bcrypt
+    # - Invoke Bcrypt and pass it the app instance
+    # - Go to models.py
+
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
