@@ -19,11 +19,7 @@ const Navigation = ({ updateUser }) => {
       that will keep our user logged in with sessions
   */
   const handleLogout = () => {
-    fetch('/logout', {method: "DELETE"})
-      .then(resp => {
-        updateUser(null)
-      })
-    navigate("/authentication");
+    console.log("Build out handle logout function!")
   };
 
   const toggleMenu = () => setMenu((prev) => !prev);
