@@ -71,7 +71,8 @@ class User(db.Model, SerializerMixin):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
     # 📝 3. Add a column _password_hash of type string
-    # Note: When an underscore is used, it's a sign that the variable or method is for internal use and should not be accessed from outside of the class directly.
+        # Note: When an underscore is used, it's a sign that the variable or method is for internal use and should not be accessed from outside of the class directly.
+        # - 🚨🚨 ADD UNIQUE CONSTRAINT TO EMAIL OR USERNAME 🚨🚨
     
     # 📝 4. Create a hybrid_property 
         # - Import the hybrid_property decorator from  sqlalchemy.ext.hybrid 
