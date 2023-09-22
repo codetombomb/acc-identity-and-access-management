@@ -13,7 +13,6 @@ const ProductionDetail = () => {
   const params = useParams();
   
   useEffect(() => {
-    console.log("fetching ", `/productions/${params.id}`)
     fetch(`/productions/${params.id}`).then((res) => {
       if (res.ok) {
         res.json().then((data) => setProduction(data));
@@ -37,7 +36,7 @@ const ProductionDetail = () => {
           <h2>Cast Members</h2>
           <ul>
             {crew_members.map((crew) => (
-              <li>{`${crew.role} : ${crew.name}`}</li>
+              <li key={crew.name}>{`${crew.role} : ${crew.name}`}</li>
             ))}
           </ul>
         </div>
