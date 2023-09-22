@@ -1,5 +1,6 @@
 from flask import request, make_response, session
 from flask_restful import Resource
+from sqlalchemy.exc import IntegrityError
 
 from models import User, Production, CrewMember
 
@@ -85,17 +86,53 @@ class ProductionByID(Resource):
 api.add_resource(ProductionByID, "/productions/<int:id>")
 
 # 7. User - POST
-# - Create a User POST route by creating a class Users that inherits from Resource
-# - Add the route '/users' with api.add_resource()
-# - Create a POST method
-# - Use .get_json() to convert the request json
-# - *** Check for missing values on the request json and return errors list with 422 if any missing ***
-# - Create a new user with the request data's name and email property
-# - *** Use the password_hash setter method to set the password on the new user object ***
-# - Add and commit the new user
-# - Save the new users id to the session hash
-# - Make a response and send it back to the client
-# - Handle errors on client side
+    # - Create a User POST route by creating a class Users that inherits from Resource
+    # - Add the route '/users' with api.add_resource()
+    # - Create a POST method
+    # - Use .get_json() to convert the request json
+    # - *** Check for missing values on the request json and return errors list with 422 if any missing ***
+    # - Create a new user with the request data's name and email property
+    # - *** Use the password_hash setter method to set the password on the new user object ***
+    # - Add and commit the new user
+    # - Save the new users id to the session hash
+    # - Make a response and send it back to the client
+    # - Handle errors on client side
+    
+def check_for_missing_values(data):
+    errors_list = []
+    for key, value in data.items():
+        if not value:
+            errors_list.append(f"{key} is required")
+    return errors_list
+
+class Users(Resource):
+    def post(self):
+        data = request.get_json()
+        errors = check_for_missing_values(data)
+        if len(errors) > 0:
+            return {"errors": errors}, 422
+
+        user = User(name=data['name'], email=data['email'])
+        
+        user.password_hash = data['password']
+        
+        try:
+            db.session.add(user)
+            db.session.commit()
+            
+            session["user_id"] = user.id
+            return user.to_dict(), 201
+            
+        except IntegrityError as e:
+            
+            if isinstance(e, (IntegrityError)):
+                for error in e.orig.args:
+                    if "UNIQUE" in error:
+                        errors.append("Email already taken. Please try again")# Get the error message as a string
+
+            return {'errors': errors}, 422
+
+api.add_resource(Users, '/users')
 
 # 8. Create a Login route
 # - Create a login custom route with methods=["POST"]
@@ -109,6 +146,24 @@ api.add_resource(ProductionByID, "/productions/<int:id>")
     # - If user not authorized, return errors list "Username or password incorrect" 401 unauthorized
 # - If user not found, return errors list "Username or password incorrect" 401 unauthorized
 # - Handle errors on client side
+
+@app.route('/login', methods=["POST"])
+def login():
+    data = request.get_json()
+    user = User.query.filter(User.name == data['name']).first()
+    if user:
+        if user.authenticate(data['password']):
+            session["user_id"] = user.id 
+            return user.to_dict(), 200
+        else:
+            return {"errors": ["Username or password incorrect"]}, 401
+    else:
+        return {"errors": ["Username or password incorrect"]}, 401
+    
+    
+
+
+
 
 # 11. Create an /authorized custom route with methods=['GET']
 # - Create a authorized function

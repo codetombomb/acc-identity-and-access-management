@@ -9,6 +9,7 @@ const Authentication = ({ updateUser }) => {
     email: "",
     password: "",
   });
+  const [errors, setErrors] = useState([])
   const navigate = useNavigate();
 
   const handleSignUpClick = () => setSignUp((signUp) => !signUp);
@@ -26,12 +27,27 @@ const Authentication = ({ updateUser }) => {
     // 📝 Handle errors in the response
 
     fetch(signUp ? "/users" : "/login", config)
-      .then((resp) => resp.json())
-      .then((user) => {
-        updateUser(user);
-        navigate("/");
-      });
+      .then((resp) => {
+        if(resp.ok){
+          resp.json().then(user => {
+            updateUser(user)
+            navigate('/')
+          })
+        } else {
+          resp.json().then(data => {
+            setTimeout(() => {
+              setErrors([])
+            }, 3000)
+            setErrors(data.errors)
+          })
+        }
+      })
   };
+
+  // .then((user) => {
+  //   updateUser(user);
+  //   navigate("/");
+  // });
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
@@ -73,7 +89,7 @@ const Authentication = ({ updateUser }) => {
       </form>
 
       <div className="auth-errors-switch-wrapper">
-        <h2 className="auth-errors">{"Errors here!!"}</h2>
+        <h2 className="auth-errors">{errors.map(err => <p key={err} style={{color: "red"}}>{err}</p>)}</h2>
         <h2>{signUp ? "Already a member?" : "Not a member?"}</h2>
         <button onClick={handleSignUpClick}>
           {signUp ? "Log In!" : "Register now!"}

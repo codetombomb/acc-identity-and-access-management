@@ -1,6 +1,9 @@
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
-from config import db
+from config import db, bcrypt
+
+from sqlalchemy.ext.hybrid import hybrid_property
+
 
 # 📝 2. Import bcrypt from config
     # - go to User model below
@@ -65,7 +68,7 @@ class User(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    email = db.Column(db.String)
+    email = db.Column(db.String, unique=True)
     admin = db.Column(db.String, default=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -73,6 +76,9 @@ class User(db.Model, SerializerMixin):
     # 📝 3. Add a column _password_hash of type string
         # Note: When an underscore is used, it's a sign that the variable or method is for internal use and should not be accessed from outside of the class directly.
         # - 🚨🚨 ADD UNIQUE CONSTRAINT TO EMAIL OR USERNAME 🚨🚨
+    _password_hash = db.Column(db.String)
+    
+    # user._password_hash
     
     # 📝 4. Create a hybrid_property 
         # - Import the hybrid_property decorator from  sqlalchemy.ext.hybrid 
@@ -81,15 +87,35 @@ class User(db.Model, SerializerMixin):
         # - Show returning of the self._password_hash property
         # - Show raising Error with message saying that password hash cant be viewed
         
+    # user.password_hash
+    # => "password hash"
+    @hybrid_property
+    def password_hash(self):
+        import ipdb; ipdb.set_trace()
+        return self._password_hash
+        raise Exception("Cannot access password hashes")
+        
     # 📝 5. Create a setter function for the password_hash property
         # - Should be decorated with @password_hash.setter
         # - Setter function should be named password_hash and should accept a password as an arg (and self)
         # - Use the bcrypt.generate_password_hash() method to hash the password_passed as an arg (.decode("utf-8"))
         # - set the _password_hash property to the hashed value
         
+    
+    # user.password_hash = "password"
+    @password_hash.setter
+    def password_hash(self, password):
+        hashed_pw = bcrypt.generate_password_hash(password).decode("utf-8")
+        self._password_hash = hashed_pw
+    
+        
     # 📝 6. Create an authenticate method that:
         # - takes in a provided password
-        # - uses bcrypt.check_password_hash() to check the self._password_hash against the provided password
+        # - uses bcrypt.check_password_hash(self._password_hash, provided_pw) to check the self._password_hash against the provided password
+    
+    def authenticate(self, provided_password):
+        return bcrypt.check_password_hash(self._password_hash, provided_password)
+        
         
     # - Back to app
     
