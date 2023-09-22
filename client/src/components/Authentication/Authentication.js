@@ -24,7 +24,7 @@ const Authentication = ({ updateUser }) => {
     };
 
     // 📝 Handle errors in the response
-    
+
     fetch(signUp ? "/users" : "/login", config)
       .then((resp) => resp.json())
       .then((user) => {
@@ -51,6 +51,13 @@ const Authentication = ({ updateUser }) => {
           value={userData.name}
           onChange={handleChange}
         />
+        <label>Password</label>
+        <input
+          type="password"
+          name="password"
+          value={userData.password}
+          onChange={handleChange}
+        />
         {signUp && (
           <>
             <label>Email</label>
@@ -58,13 +65,6 @@ const Authentication = ({ updateUser }) => {
               type="text"
               name="email"
               value={userData.email}
-              onChange={handleChange}
-            />
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={userData.password}
               onChange={handleChange}
             />
           </>
